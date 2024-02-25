@@ -91,7 +91,7 @@ func TestOption_MarshalJSON(t *testing.T) {
 		if err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}
-		expectEq(t, string(b), `{"kind":"None","value":0}`)
+		expectEq(t, string(b), `{"kind":"Option::None","value":0}`)
 	})
 
 	t.Run("some", func(t *testing.T) {
@@ -99,7 +99,7 @@ func TestOption_MarshalJSON(t *testing.T) {
 		if err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}
-		expectEq(t, string(b), `{"kind":"Some","value":42}`)
+		expectEq(t, string(b), `{"kind":"Option::Some","value":42}`)
 	})
 
 	t.Run("some record", func(t *testing.T) {
@@ -107,7 +107,7 @@ func TestOption_MarshalJSON(t *testing.T) {
 		if err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}
-		expectEq(t, string(b), `{"kind":"Some","value":{"ID":1}}`)
+		expectEq(t, string(b), `{"kind":"Option::Some","value":{"ID":1}}`)
 	})
 
 	t.Run("none record", func(t *testing.T) {
@@ -115,14 +115,14 @@ func TestOption_MarshalJSON(t *testing.T) {
 		if err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}
-		expectEq(t, string(b), `{"kind":"None","value":{"ID":0}}`)
+		expectEq(t, string(b), `{"kind":"Option::None","value":{"ID":0}}`)
 	})
 }
 
 func TestOption_UnmarshalJSON(t *testing.T) {
 	t.Run("none", func(t *testing.T) {
 		var opt Option[int]
-		if err := opt.UnmarshalJSON([]byte(`{"kind":"None","value":0}`)); err != nil {
+		if err := opt.UnmarshalJSON([]byte(`{"kind":"Option::None","value":0}`)); err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}
 		expectEq(t, opt.Absent(), true)
@@ -130,7 +130,7 @@ func TestOption_UnmarshalJSON(t *testing.T) {
 
 	t.Run("some", func(t *testing.T) {
 		var opt Option[int]
-		if err := opt.UnmarshalJSON([]byte(`{"kind":"Some","value":42}`)); err != nil {
+		if err := opt.UnmarshalJSON([]byte(`{"kind":"Option::Some","value":42}`)); err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}
 
@@ -140,7 +140,7 @@ func TestOption_UnmarshalJSON(t *testing.T) {
 
 	t.Run("none record", func(t *testing.T) {
 		var opt Option[Record]
-		if err := opt.UnmarshalJSON([]byte(`{"kind":"None","value":{"ID":0}}`)); err != nil {
+		if err := opt.UnmarshalJSON([]byte(`{"kind":"Option::None","value":{"ID":0}}`)); err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}
 		expectEq(t, opt.Absent(), true)
@@ -148,7 +148,7 @@ func TestOption_UnmarshalJSON(t *testing.T) {
 
 	t.Run("some record", func(t *testing.T) {
 		var opt Option[Record]
-		if err := opt.UnmarshalJSON([]byte(`{"kind":"Some","value":{"ID":1}}`)); err != nil {
+		if err := opt.UnmarshalJSON([]byte(`{"kind":"Option::Some","value":{"ID":1}}`)); err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}
 
@@ -158,7 +158,7 @@ func TestOption_UnmarshalJSON(t *testing.T) {
 
 	t.Run("unexpected kind", func(t *testing.T) {
 		var opt Option[int]
-		if err := opt.UnmarshalJSON([]byte(`{"kind":"Maybe","value":42}`)); err == nil {
+		if err := opt.UnmarshalJSON([]byte(`{"kind":"Option::Maybe","value":42}`)); err == nil {
 			t.Errorf("expected error, got nil")
 		}
 
@@ -167,7 +167,7 @@ func TestOption_UnmarshalJSON(t *testing.T) {
 
 	t.Run("unexpected value", func(t *testing.T) {
 		var opt Option[Record]
-		if err := opt.UnmarshalJSON([]byte(`{"kind":"Some","value":42}`)); err == nil {
+		if err := opt.UnmarshalJSON([]byte(`{"kind":"Option::Some","value":42}`)); err == nil {
 			t.Errorf("expected error, got nil")
 		}
 

@@ -79,9 +79,9 @@ func (opt Option[T]) AltBy(supplier func() Option[T]) Option[T] {
 
 func (opt Option[T]) MarshalJSON() ([]byte, error) {
 	if opt.Absent() {
-		return json.Marshal(jsonValue[T]{Kind: "None"})
+		return json.Marshal(jsonValue[T]{Kind: "Option::None"})
 	}
-	return json.Marshal(jsonValue[T]{Kind: "Some", Value: opt.value})
+	return json.Marshal(jsonValue[T]{Kind: "Option::Some", Value: opt.value})
 }
 
 func (opt *Option[T]) UnmarshalJSON(data []byte) error {
@@ -91,9 +91,9 @@ func (opt *Option[T]) UnmarshalJSON(data []byte) error {
 	}
 
 	switch jv.Kind {
-	case "None":
+	case "Option::None":
 		*opt = None[T]()
-	case "Some":
+	case "Option::Some":
 		*opt = Some(jv.Value)
 	default:
 		return fmt.Errorf("option: unexpected kind: %q", jv.Kind)
