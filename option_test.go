@@ -57,6 +57,11 @@ func TestOption_ValueOrBy(t *testing.T) {
 	t.Run("absent", func(t *testing.T) {
 		expectEq(t, None[int]().ValueOrBy(func() int { return 42 }), 42)
 	})
+
+	t.Run("using zero value of", func(t *testing.T) {
+		opt := Some(42)
+		expectEq(t, opt.ValueOrBy(ZeroValueOf[int]), 42)
+	})
 }
 
 func TestOption_Alt(t *testing.T) {
@@ -172,6 +177,17 @@ func TestOption_UnmarshalJSON(t *testing.T) {
 		}
 
 		expectEq(t, opt.Absent(), true)
+	})
+}
+
+func TestOption_ValueOrZero(t *testing.T) {
+	t.Run("present", func(t *testing.T) {
+		opt := Some(42)
+		expectEq(t, opt.ValueOrZero(), 42)
+	})
+
+	t.Run("absent", func(t *testing.T) {
+		expectEq(t, None[int]().ValueOrZero(), 0)
 	})
 }
 
