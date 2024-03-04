@@ -12,14 +12,19 @@ type Option[T any] struct {
 	present bool
 }
 
+// From creates an Option from the value and the presence flag.
+func From[T any](value T, present bool) Option[T] {
+	return Option[T]{value: value, present: present}
+}
+
 // Some creates a present Option.
 func Some[T any](v T) Option[T] {
-	return Option[T]{value: v, present: true}
+	return From(v, true)
 }
 
 // None creates an absent Option.
 func None[T any]() Option[T] {
-	return Option[T]{value: ZeroValueOf[T](), present: false}
+	return From(ZeroValueOf[T](), false)
 }
 
 // String returns a string representation of the Option.
