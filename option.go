@@ -19,7 +19,7 @@ func Some[T any](v T) Option[T] {
 
 // None creates an absent Option.
 func None[T any]() Option[T] {
-	return Option[T]{value: zeroValueOf[T](), present: false}
+	return Option[T]{value: ZeroValueOf[T](), present: false}
 }
 
 // String returns a string representation of the Option.
@@ -51,6 +51,11 @@ func (opt Option[T]) ValueOr(fallback T) T {
 		return fallback
 	}
 	return opt.value
+}
+
+// ValueOrZero returns the value of the Option if present, otherwise, it returns the zero value of the type T.
+func (opt Option[T]) ValueOrZero() T {
+	return opt.ValueOrBy(ZeroValueOf[T])
 }
 
 // ValueOrBy returns the value of the Option if present, otherwise, it returns the value from the supplier.
@@ -101,7 +106,8 @@ func (opt *Option[T]) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func zeroValueOf[T any]() (z T) { return }
+// ZeroValueOf returns the zero value of the type T.
+func ZeroValueOf[T any]() (z T) { return }
 
 type jsonValue[T any] struct {
 	Kind  string `json:"kind"` // "Some" or "None"
